@@ -102,5 +102,8 @@
     ],
     "testEnvironment": "node",
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(js|jsx)$"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   }
 }
