@@ -1,0 +1,11 @@
+.rv-force__node {
+  cursor: pointer;
+}
+
+.rv-force__label {
+  pointer-events: none;
+}
+
+.rv-force__label::selection {
+  background: none;
+}
