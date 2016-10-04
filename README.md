@@ -23,5 +23,5 @@ import {ForceGraph, ForceGraphNode, ForceGraphLink} from 'react-vis-force';
 
 ## Docs
 
-* InteractiveForceGraph
-* ForceGraph
+* [InteractiveForceGraph](docs/InteractiveForceGraph.md)
+* [ForceGraph](docs/ForceGraph.md)

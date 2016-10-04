@@ -255,7 +255,7 @@ export default class ForceGraph extends PureRenderComponent {
             node,
             showLabel,
             labelClass,
-            labelStyle,
+            labelStyle = {},
             strokeWidth,
           } = child.props;
           const nodePosition = nodePositions[forceUtils.nodeId(node)];

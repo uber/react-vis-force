@@ -24,6 +24,8 @@ import { document } from 'global';
 
 import './Demo.css';
 import SimpleExample from './SimpleExample';
+import ZoomableExample from './ZoomableExample';
+import InteractiveExample from './InteractiveExample';
 import LesMisExample from './LesMisExample';
 
 ReactDOM.render(
@@ -46,6 +48,12 @@ ReactDOM.render(
 
     <h2>{'Simple example'}</h2>
     <SimpleExample />
+
+    <h2>{'Zoomable example'}</h2>
+    <ZoomableExample />
+
+    <h2>{'Interactive example'}</h2>
+    <InteractiveExample />
 
     <h2>
       {'Les Mis demo, adapted from '}
