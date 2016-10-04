@@ -1,1 +1,8 @@
-language: node
+---
+language: node_js
+node_js:
+  - 4
+cache:
+  directories:
+  - node_modules
+script: npm run test:ci
