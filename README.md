@@ -1,4 +1,4 @@
-# react-vis ![Build Status](https://travis-ci.org/uber/react-vis-force.svg?branch=master)
+# react-vis-force ![Build Status](https://travis-ci.org/uber/react-vis-force.svg?branch=master)
 
 ![react-vis-force demo](https://uber.github.io/react-vis-force/images/react-vis-force.gif)
 
