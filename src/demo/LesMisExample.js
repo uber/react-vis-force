@@ -20,14 +20,9 @@
 
 import React from 'react';
 import { scaleCategory20 } from 'd3-scale';
-import Perf from 'react-addons-perf';
-import { window } from 'global';
 
 import { ForceGraphNode, ForceGraphLink, InteractiveForceGraph } from '../';
 import lesMisJSON from './les-miserables.json';
-
-window.Perf = Perf;
-Perf.start();
 
 // create a color scale for use in colorizing the groups
 const scale = scaleCategory20();
@@ -45,7 +40,7 @@ const radii = lesMisJSON.nodes.reduce(
   {}
 );
 
-export default function LesMisDemo() {
+export default function LesMisExample() {
   return (
     <InteractiveForceGraph
       simulationOptions={{

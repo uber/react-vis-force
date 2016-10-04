@@ -44,6 +44,7 @@ export default class InteractiveForceGraph extends PureRenderComponent {
 
   static get defaultProps() {
     return {
+      className: '',
       defaultSelectedNode: null,
       opacityFactor: 4,
       onSelectNode() {},
@@ -90,6 +91,7 @@ export default class InteractiveForceGraph extends PureRenderComponent {
       highlightDependencies,
       opacityFactor,
       children,
+      className,
       ...spreadableProps,
     } = this.props;
 
@@ -175,7 +177,7 @@ export default class InteractiveForceGraph extends PureRenderComponent {
     };
 
     return (
-      <ForceGraph {...spreadableProps}>
+      <ForceGraph className={`rv-force__interactive ${className}`} {...spreadableProps}>
         {Children.map(children, (child) => {
           switch (child.type) {
             case ForceGraphNode: {

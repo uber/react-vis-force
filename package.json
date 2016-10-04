@@ -1,6 +1,6 @@
 {
   "name": "react-vis-force",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
   "main": "./dist/react-vis-force.js",
   "homepage": "http://uber.github.io/react-vis-force",

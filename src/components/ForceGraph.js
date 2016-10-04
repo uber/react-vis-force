@@ -219,6 +219,7 @@ export default class ForceGraph extends PureRenderComponent {
   render() {
     const {
       children,
+      className,
       labelAttr,
       labelOffset,
       showLabels,
@@ -310,7 +311,7 @@ export default class ForceGraph extends PureRenderComponent {
     });
 
     return (
-      <svg className="rv-force__svg" width={width} height={height}>
+      <svg className={`rv-force__svg ${className}`} width={width} height={height}>
         <g className="rv-force__static-elements">{staticChildren}</g>
         <ZoomableSVGGroup
           disabled={!zoom}
