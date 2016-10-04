@@ -79,7 +79,7 @@
     "check-licence": "uber-licence --dry",
     "add-licence": "uber-licence",
     "prepublish": "npm run test:ci && npm run build && npm run add-licence",
-    "postpublish": "npm run build:gh-pages && npm run deploy-docs"
+    "postpublish": "npm run build:docs && npm run deploy-docs"
   },
   "pre-commit": ["test:ci", "check-licence"],
   "pre-commit.silent": true,
