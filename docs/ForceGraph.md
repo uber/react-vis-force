@@ -1,4 +1,4 @@
-# <ForceGraph />
+# `<ForceGraph />`
 
 ## Usage
 
