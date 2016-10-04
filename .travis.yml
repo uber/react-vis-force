@@ -6,3 +6,5 @@ cache:
   directories:
   - node_modules
 script: npm run test:ci
+before_install:
+    - "npm install -g npm@^3"
