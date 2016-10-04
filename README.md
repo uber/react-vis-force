@@ -1,6 +1,6 @@
 # react-vis ![Build Status](https://travis-ci.org/uber/react-vis-force.svg?branch=master)
 
-![react-vis-force demo](http://uber.github.io/public/images/react-vis-force.gif)
+![react-vis-force demo](https://uber.github.io/react-vis-force/images/react-vis-force.gif)
 
 See the live demo at http://uber.github.io/react-vis-force
 
