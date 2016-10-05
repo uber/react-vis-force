@@ -76,8 +76,8 @@ ReactDOM.render(
     <DemoExample
       title="Simple Example"
       codeSample={`<ForceGraph simulationOptions={{ height: 300, width: 300 }}>
-  <ForceGraphNode node={{ id: 'first-node', radius: 5 }} fill="red" />
-  <ForceGraphNode showLabel node={{ id: 'second-node', radius: 5 }} fill="blue" />
+  <ForceGraphNode node={{ id: 'first-node' }} fill="red" />
+  <ForceGraphNode showLabel node={{ id: 'second-node' }} fill="blue" />
   <ForceGraphLink link={{ source: 'first-node', target: 'second-node' }} />
 </ForceGraph>`}
     >
@@ -87,8 +87,8 @@ ReactDOM.render(
     <DemoExample
       title="Zoomable Example"
       codeSample={`<ForceGraph zoom minScale={1} maxScale={3} simulationOptions={{ height: 300, width: 300 }}>
-  <ForceGraphNode node={{ id: 'first-node', radius: 5 }} fill="red" />
-  <ForceGraphNode node={{ id: 'second-node', radius: 5 }} fill="blue" />
+  <ForceGraphNode node={{ id: 'first-node' }} fill="red" />
+  <ForceGraphNode node={{ id: 'second-node' }} fill="blue" />
   <ForceGraphLink link={{ source: 'first-node', target: 'second-node' }} />
   <line x1={150} y1={-1000} x2={150} y2={1300} zoomable stroke="green" />
   <text x={100} y={100}>{'not zoomed'}</text>
@@ -104,8 +104,8 @@ ReactDOM.render(
   labelAttr="label"
   onSelectNode={(event, node) => console.log(node)}
 >
-  <ForceGraphNode node={{ id: 'first-node', label: 'First node', radius: 5 }} fill="red" />
-  <ForceGraphNode node={{ id: 'second-node', label: 'Second node', radius: 5 }} fill="blue" />
+  <ForceGraphNode node={{ id: 'first-node', label: 'First node' }} fill="red" />
+  <ForceGraphNode node={{ id: 'second-node', label: 'Second node' }} fill="blue" />
   <ForceGraphLink link={{ source: 'first-node', target: 'second-node' }} />
 </InteractiveForceGraph>`}
     >

@@ -41,7 +41,6 @@ export default class ForceGraphNode extends PureRenderComponent {
       className: '',
       fill: '#333',
       opacity: 1,
-      radius: 5,
       stroke: '#FFF',
       strokeWidth: 1.5,
     };
@@ -56,10 +55,12 @@ export default class ForceGraphNode extends PureRenderComponent {
       ...spreadable,
     } = this.props;
 
+    const { radius = 5 } = node;
+
     return (
       <circle
         className={`rv-force__node ${className}`}
-        r={r || node.radius}
+        r={r || radius}
         {...spreadable}
       />
     );
