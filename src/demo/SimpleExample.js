@@ -24,8 +24,8 @@ import { ForceGraph, ForceGraphNode, ForceGraphLink } from '../';
 export default function SimpleExample() {
   return (
     <ForceGraph simulationOptions={{ height: 300, width: 300 }}>
-      <ForceGraphNode node={{ id: 'first-node', radius: 5 }} fill="red" />
-      <ForceGraphNode showLabel node={{ id: 'second-node', radius: 5 }} fill="blue" />
+      <ForceGraphNode node={{ id: 'first-node' }} fill="red" />
+      <ForceGraphNode showLabel node={{ id: 'second-node' }} fill="blue" />
       <ForceGraphLink link={{ source: 'first-node', target: 'second-node' }} />
     </ForceGraph>
   );

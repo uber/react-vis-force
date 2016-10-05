@@ -18,17 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React from 'react';
-import { ForceGraph, ForceGraphNode, ForceGraphLink } from '../';
+const bindFactory = fn => ({ fn });
+const unbindFactory = obj => ({ ...obj, fn: noop => noop });
 
-export default function SimpleExample() {
-  return (
-    <ForceGraph zoom minScale={1} maxScale={3} simulationOptions={{ height: 300, width: 300 }}>
-      <ForceGraphNode node={{ id: 'first-node' }} fill="red" />
-      <ForceGraphNode node={{ id: 'second-node' }} fill="blue" />
-      <ForceGraphLink link={{ source: 'first-node', target: 'second-node' }} />
-      <line x1={150} y1={-1000} x2={150} y2={1300} zoomable stroke="green" />
-      <text x={100} y={100}>{'not zoomed'}</text>
-    </ForceGraph>
-  );
-}
+export const requestAnimationFrame = jest.fn((...args) => bindFactory(...args));
+export const cancelAnimationFrame = jest.fn((...args) => unbindFactory(...args));

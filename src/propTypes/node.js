@@ -22,5 +22,5 @@ import { PropTypes } from 'react';
 
 export default PropTypes.shape({
   id: PropTypes.string.isRequired,
-  radius: PropTypes.number.isRequired,
+  radius: PropTypes.number,
 });

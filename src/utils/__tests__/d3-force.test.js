@@ -218,8 +218,8 @@ describe('d3ForceUtils', () => {
         testFn({ ...defaultOptions }).nodes().forEach((node) => {
           expect(typeof node.id).toEqual('string');
           expect(typeof node.radius).toEqual('number');
-          expect(typeof node.fx).toEqual('number');
-          expect(typeof node.fy).toEqual('number');
+          expect(typeof node.x).toEqual('number');
+          expect(typeof node.y).toEqual('number');
           expect(node.meta).toBeUndefined();
         });
       });
@@ -235,8 +235,12 @@ describe('d3ForceUtils', () => {
 
       it('should set the links', () => {
         testFn({ ...defaultOptions }).force('link').links().forEach((node) => {
-          expect(typeof node.source).toEqual('string');
-          expect(typeof node.target).toEqual('string');
+          expect(typeof node.source.id).toEqual('string');
+          expect(typeof node.source.x).toEqual('number');
+          expect(typeof node.source.y).toEqual('number');
+          expect(typeof node.target.id).toEqual('string');
+          expect(typeof node.target.x).toEqual('number');
+          expect(typeof node.target.y).toEqual('number');
           expect(typeof node.value).toEqual('number');
           expect(node.meta).toBeUndefined();
         });

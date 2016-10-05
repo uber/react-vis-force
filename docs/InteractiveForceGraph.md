@@ -12,8 +12,8 @@ import { ForceGraph, ForceGraphNode, ForceGraphLink } from 'react-vis-force';
   onSelectNode={(node) => console.log(node)}
   highlightDependencies
 >
-  <ForceGraphNode node={{ id: 'first-node', label: 'First node', radius: 5 }} fill="red" />
-  <ForceGraphNode node={{ id: 'second-node', label: 'Second node', radius: 5 }} fill="blue" />
+  <ForceGraphNode node={{ id: 'first-node', label: 'First node' }} fill="red" />
+  <ForceGraphNode node={{ id: 'second-node', label: 'Second node' }} fill="blue" />
   <ForceGraphLink link={{ source: 'first-node', target: 'second-node' }} />
 </InteractiveForceGraph>
 ```

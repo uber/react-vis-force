@@ -167,16 +167,16 @@ export default class ForceGraph extends PureRenderComponent {
   }
 
   onZoom(event, scale, ...args) {
-    this.setState({ scale });
     this.props.onZoom(event, scale, ...args);
+    this.setState({ scale });
   }
 
-  getDataFromChildren() {
-    if (new Date() > this.lastUpdated) {
+  getDataFromChildren(props = this.props, force = false) {
+    if (!force && (this.cachedData && new Date() > this.lastUpdated)) {
       return this.cachedData;
     }
 
-    const data = ForceGraph.getDataFromChildren(this.props.children);
+    const data = ForceGraph.getDataFromChildren(props.children);
 
     Object.assign(this, { cachedData: data, lastUpdated: new Date() });
 
@@ -199,7 +199,7 @@ export default class ForceGraph extends PureRenderComponent {
     this.simulation = updateSimulation(simulation, {
       ...DEFAULT_SIMULATION_PROPS,
       ...simulationOptions,
-      data: this.getDataFromChildren(),
+      data: this.getDataFromChildren(props, true),
     });
 
     this.onSimulationTick();

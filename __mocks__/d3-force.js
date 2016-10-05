@@ -32,11 +32,14 @@ export function createMockSimulation() {
   let currentVelocityDecay = 0;
   let nodeList = [];
 
+  let __events = {};
+
   return {
+    __events,
     restart: jest.fn(() => { currentAlpha = TEST_INITIAL_ALPHA; }),
     stop: jest.fn(),
-    on: jest.fn(),
-    off: jest.fn(),
+    on: jest.fn((name, fn) => { __events[name] = fn; }),
+    off: jest.fn((name) => { delete __events[name]; }),
     tick: jest.fn(() => { currentAlpha -= TEST_TICK_INTERVAL; }),
     force: jest.fn((key, newValue = forceMap[key]) => {
       forceMap[key] = newValue;
@@ -46,8 +49,8 @@ export function createMockSimulation() {
       nodeList = newNodes;
       return newNodes.map(node => ({
         ...node,
-        fx: Math.random() * 100,
-        fy: Math.random() * 100,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
       }));
     }),
     alpha: jest.fn((newAlpha = currentAlpha) => {
@@ -96,7 +99,29 @@ export function createMockLinkForce(initialLinks = []) {
     }),
     links: jest.fn((newLinks = linkList) => {
       linkList = newLinks;
-      return newLinks;
+      return newLinks.map((link) => {
+        let { source, target } = link;
+        if (typeof source === 'string') {
+          source = { id: source };
+        }
+        if (typeof target === 'string') {
+          target = { id: target };
+        }
+
+        return {
+          ...link,
+          source: {
+            ...source,
+            x: Math.random() * 100,
+            y: Math.random() * 100,
+          },
+          target: {
+            ...target,
+            x: Math.random() * 100,
+            y: Math.random() * 100,
+          },
+        };
+      });
     }),
   };
 
