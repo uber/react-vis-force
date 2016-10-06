@@ -1,6 +1,6 @@
 # react-vis-force ![Build Status](https://travis-ci.org/uber/react-vis-force.svg?branch=master) [![Coverage Status](https://coveralls.io/repos/github/uber/react-vis-force/badge.svg?branch=master)](https://coveralls.io/github/uber/react-vis-force?branch=master)
 
-![react-vis-force demo](https://uber.github.io/react-vis-force/images/react-vis-force.gif)
+![react-vis-force demo](https://raw.githubusercontent.com/uber/react-vis-force/master/docs/react-vis-force.gif)
 
 See the live demo at http://uber.github.io/react-vis-force
 
