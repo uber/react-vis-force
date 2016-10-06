@@ -58,7 +58,8 @@
     "url-loader": "0.5.7",
     "webpack": "1.13.2",
     "webpack-dev-server": "1.16.1",
-    "whatwg-fetch": "1.0.0"
+    "whatwg-fetch": "1.0.0",
+    "@kadira/storybook": "^2.21.0"
   },
   "peerDependencies": {
     "react": "0.14.x - 15.x",
@@ -70,9 +71,9 @@
     "react-addons-shallow-compare": "0.14.x - 15.x"
   },
   "scripts": {
-    "start": "REACT_APP_DEMO=true node scripts/start.js",
+    "start": "npm run start-storybook",
     "build": "node scripts/build.js",
-    "build:docs": "DOCS=true npm run build",
+    "build:docs": "npm run build-storybook",
     "test": "npm run lint && npm run unittest",
     "test:ci": "npm run lint && npm run coverage && cat ./coverage/lcov.info | coveralls",
     "unittest": "node scripts/test.js --env=jsdom",
@@ -82,7 +83,9 @@
     "add-licence": "uber-licence",
     "deploy-docs": "./bin/deploy-docs.sh",
     "prepublish": "npm run coverage && npm run build && npm run add-licence",
-    "postpublish": "npm run build:docs && npm run deploy-docs"
+    "postpublish": "npm run build:docs && npm run deploy-docs",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook -o build"
   },
   "jest": {
     "moduleFileExtensions": [

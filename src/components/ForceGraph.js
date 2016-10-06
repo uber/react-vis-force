@@ -41,6 +41,7 @@ export default class ForceGraph extends PureRenderComponent {
       minScale: PropTypes.number,
       maxScale: PropTypes.number,
       onZoom: PropTypes.func,
+      onPan: PropTypes.func,
 
       // create custom simulations
       createSimulation: PropTypes.func,
@@ -67,6 +68,7 @@ export default class ForceGraph extends PureRenderComponent {
       },
       showLabels: false,
       onZoom() {},
+      onPan() {},
     };
   }
 
@@ -169,6 +171,10 @@ export default class ForceGraph extends PureRenderComponent {
   onZoom(event, scale, ...args) {
     this.props.onZoom(event, scale, ...args);
     this.setState({ scale });
+  }
+
+  onPan(...args) {
+    this.props.onPan(...args);
   }
 
   getDataFromChildren(props = this.props, force = false) {
@@ -320,6 +326,7 @@ export default class ForceGraph extends PureRenderComponent {
           minScale={minScale}
           maxScale={maxScale}
           onZoom={(...args) => this.onZoom(...args)}
+          onPan={(...args) => this.onPan(...args)}
         >
           <g className="rv-force__zoomable-elements">{zoomableChildren}</g>
           <g className="rv-force__links">{linkElements}</g>
