@@ -1,5 +1,4 @@
 @import url(https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.min.css);
-@import url(https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-coy.min.css);
 
 .rv-force__node, .rv-force__link, .rv-force__label {
   transition: opacity 250ms, color 250ms;
