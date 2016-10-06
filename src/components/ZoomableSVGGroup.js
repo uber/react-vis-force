@@ -22,6 +22,21 @@ import React, { PropTypes } from 'react';
 
 import PureRenderComponent from './PureRenderComponent';
 
+export const ZOOMABLE_SVG_GROUP_EVENT_NAMES = [
+  'onMouseDown',
+  'onMouseMove',
+  'onMouseUp',
+  'onTouchCancel',
+  'onTouchEnd',
+  'onTouchMove',
+  'onTouchStart',
+  'onWheel',
+];
+
+/**
+ * This component draws upon the patterns in https://github.com/anvaka/panzoom
+ * and applies them to a simple React component that can wrap SVG children.
+ */
 export default class ZoomableSVGGroup extends PureRenderComponent {
   static get propTypes() {
     return {
@@ -33,6 +48,11 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
       maxScale: PropTypes.number,
       panLimit: PropTypes.number,
       onZoom: PropTypes.func,
+      onPan: PropTypes.func,
+      ...ZOOMABLE_SVG_GROUP_EVENT_NAMES.reduce((obj, eventName) => ({
+        ...obj,
+        [eventName]: PropTypes.func,
+      }), {}),
     };
   }
 
@@ -47,19 +67,12 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
       minScale: 0,
       maxScale: Infinity,
       onZoom() {},
+      onPan() {},
+      ...ZOOMABLE_SVG_GROUP_EVENT_NAMES.reduce((obj, eventName) => ({
+        ...obj,
+        [eventName]() {},
+      }), {}),
     };
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      matrix: [1, 0, 0, 1, 0, 0],
-      scale: 1,
-    };
-  }
-
-  componentDidMount() {
-    this.setInitialMatrix();
   }
 
   /**
@@ -73,6 +86,8 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
       matrix.findIndex(item => typeof item !== 'number') === -1;
   }
 
+  // based on the method of the same name from panzoom
+  // https://github.com/anvaka/panzoom/blob/master/index.js/#L201-L204
   /* eslint-disable no-mixed-operators */
   static getPinchZoomLength(finger1, finger2) {
     return (finger1.clientX - finger2.clientX) *
@@ -82,8 +97,6 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
   }
   /* eslint-enable no-mixed-operators */
 
-  // based on the method of the same name from panzoom
-  // https://github.com/anvaka/panzoom/blob/master/index.js/
   static getTouchClientValues(event) {
     if (event.touches.length >= 2) {
       return {
@@ -93,6 +106,18 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
     }
 
     return event.touches[0];
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      matrix: [1, 0, 0, 1, 0, 0],
+      scale: 1,
+    };
+  }
+
+  componentDidMount() {
+    this.setInitialMatrix();
   }
 
   setInitialMatrix() {
@@ -128,7 +153,7 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
 
   // based on the zoomTo method from the panzoom project
   // https://github.com/anvaka/panzoom/blob/master/lib/zoomTo.js
-  zoomTo(clientX, clientY, scaleMultiplier, callback = noop => noop) {
+  zoomTo(clientX, clientY, scaleMultiplier, event) {
     const prevMatrix = this.state.matrix;
     const prevScale = this.state.scale;
     const scale = prevScale * scaleMultiplier;
@@ -152,10 +177,10 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
         x - (scaleMultiplier * (x - prevMatrix[4])),
         y - (scaleMultiplier * (y - prevMatrix[5])),
       ],
-    }, callback);
+    }, () => this.props.onZoom(event, scale));
   }
 
-  panBy(clientX, clientY, callback = noop => noop) {
+  panBy(clientX, clientY, event) {
     const { width, height, panLimit } = this.props;
     const {
       matrix: prevMatrix,
@@ -186,10 +211,10 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
         prevMatrix[1],
         prevMatrix[2],
         prevMatrix[3],
-        prevMatrix[4] + dx,
-        prevMatrix[5] + dy,
+        newX,
+        newY,
       ],
-    }, callback);
+    }, () => this.props.onPan(event, newX, newY));
   }
 
   onMouseDown(event) {
@@ -247,13 +272,7 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
   }
 
   onTouchEnd() {
-    this.setState({
-      touching: false,
-      dragging: false,
-      pinchLength: null,
-      dragX: null,
-      dragY: null,
-    });
+    this.onTouchCancel();
   }
 
   onTouchMove(event) {
@@ -276,10 +295,7 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
       const { clientX, clientY } = ZoomableSVGGroup.getTouchClientValues(event);
       const scaleMultiplier = this.getScaleMultiplier(delta);
 
-      this.zoomTo(clientX, clientY, scaleMultiplier, () => {
-        this.props.onZoom(event, this.state.scale);
-      });
-
+      this.zoomTo(clientX, clientY, scaleMultiplier, event);
       this.setState({ pinchLength });
     } else {
       this.panBy(event.touches[0].clientX, event.touches[0].clientY);
@@ -287,13 +303,13 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
   }
 
   onTouchStart(event) {
-    const { clientX, clientY } = ZoomableSVGGroup.getTouchClientValues(event);
+    const { clientX: dragX, clientY: dragY } = ZoomableSVGGroup.getTouchClientValues(event);
 
     this.setState({
       touching: true,
       pinchLength: 0,
-      dragX: clientX,
-      dragY: clientY,
+      dragX,
+      dragY,
     });
   }
 
@@ -303,9 +319,7 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
 
     if (scaleMultiplier !== 1) {
       event.preventDefault();
-      this.zoomTo(clientX, clientY, scaleMultiplier, () =>
-        this.props.onZoom(event, this.state.scale)
-      );
+      this.zoomTo(clientX, clientY, scaleMultiplier, event);
     }
   }
 
@@ -320,24 +334,25 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
       // omit these from the passthrough
       /* eslint-disable no-unused-vars */
       canvasHeight, canvasWidth, minScale,
-      maxScale, panLimit, onZoom, zoomSpeed,
+      maxScale, panLimit, onZoom, onPan, zoomSpeed,
       /* esline-enable no-unused-vars */
       ...passthrough,
     } = this.props;
     const { matrix, scale } = this.state;
 
-    const zoomProps = {};
+    const eventHandler = eventName => (...args) => {
+      this[eventName](...args);
+      this.props[eventName](...args);
+    };
+
+    const zoomProps = { transform };
 
     if (!disabled && ZoomableSVGGroup.isValidMatrix(matrix)) {
       Object.assign(zoomProps, {
-        onMouseDown: (...args) => this.onMouseDown(...args),
-        onMouseMove: (...args) => this.onMouseMove(...args),
-        onMouseUp: (...args) => this.onMouseUp(...args),
-        onTouchCancel: (...args) => this.onTouchCancel(...args),
-        onTouchEnd: (...args) => this.onTouchEnd(...args),
-        onTouchMove: (...args) => this.onTouchMove(...args),
-        onTouchStart: (...args) => this.onTouchStart(...args),
-        onWheel: (...args) => this.onWheel(...args),
+        ...ZOOMABLE_SVG_GROUP_EVENT_NAMES.reduce((obj, eventName) => ({
+          ...obj,
+          [eventName]: eventHandler(eventName),
+        }), {}),
         style: Object.assign({}, style, {
           transformOrigin: '0 0 0',
           cursor: 'default',
@@ -345,12 +360,10 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
         }),
         transform: `matrix(${matrix.join(' ')}) ${transform}`,
       });
-    } else {
-      zoomProps.transform = transform;
     }
 
     return (
-      <g ref={(c) => { this.el = c; }} {...zoomProps} {...passthrough}>
+      <g ref={/* istanbul ignore next */(c) => { this.el = c; }} {...passthrough} {...zoomProps}>
         <rect
           x={-1 * matrix[4]}
           y={-1 * matrix[5]}
