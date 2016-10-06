@@ -18,6 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import React from 'react';
+import { shallow } from 'enzyme';
+
+import InteractiveForceGraph from '../InteractiveForceGraph';
+import ForceGraph from '../ForceGraph';
+
 describe('<InteractiveForceGraph />', () => {
-  it('should skip', () => expect(true).toEqual(true));
+  describe('render', () => {
+    it('renders a <ForceGraph />', () => {
+      const wrapper = shallow(<InteractiveForceGraph />);
+      expect(wrapper.type()).toEqual(ForceGraph);
+    });
+  });
+
+  describe('instance methods', () => {
+    describe('onHoverNode', () => {});
+    describe('onBlurNode', () => {});
+    describe('onClickNode', () => {});
+  });
 });
