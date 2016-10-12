@@ -7,4 +7,6 @@ cache:
   - node_modules
 script: npm run test:ci
 before_install:
-    - "npm install -g npm@^3"
+  - npm install -g npm@^3
+after_success:
+  - npm run ci:postsuccess

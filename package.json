@@ -84,6 +84,7 @@
     "deploy-docs": "./bin/deploy-docs.sh",
     "prepublish": "npm run coverage && npm run build && npm run add-licence",
     "postpublish": "npm run build:docs && npm run deploy-docs",
+    "ci:postsuccess": "npm run build:docs && npm run deploy-docs",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook -o build"
   },
