@@ -71,7 +71,7 @@
     "react-addons-shallow-compare": "0.14.x - 15.x"
   },
   "scripts": {
-    "start": "npm run start-storybook",
+    "start": "npm run storybook",
     "build": "node scripts/build.js",
     "build:docs": "npm run build-storybook",
     "test": "npm run lint && npm run unittest",
