@@ -27,7 +27,7 @@ import ForceGraphNode from './ForceGraphNode';
 import ForceGraphLink from './ForceGraphLink';
 import { nodeId } from '../utils/d3-force';
 
-const isTouch = 'ontouchstart' in window;
+const isTouch = window && 'ontouchstart' in window;
 
 export default class InteractiveForceGraph extends PureRenderComponent {
   static get propTypes() {
