@@ -158,10 +158,10 @@ export default class InteractiveForceGraph extends PureRenderComponent {
 
     const opacityForLink = (link, origOpacity = 1) => {
       if (
-        highlightDependencies && (
+        highlightDependencies ? (
           (hoveredNode && !isLinkHighlighted(hoveredNode, link)) ||
           (selectedNode && !isLinkHighlighted(selectedNode, link))
-        )
+        ) : (hoveredNode || selectedNode)
       ) {
         return applyOpacity(origOpacity / 4);
       }
