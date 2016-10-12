@@ -194,7 +194,7 @@ export default class ForceGraph extends PureRenderComponent {
   }
 
   unbindSimulationTick() {
-    this.simulation.on('.tick', null);
+    this.simulation.on('tick', null);
     this.frame = this.frame && rafUtils.cancelAnimationFrame(this.frame);
   }
 
