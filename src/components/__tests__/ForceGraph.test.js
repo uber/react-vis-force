@@ -548,7 +548,7 @@ describe('<ForceGraph />', () => {
 
         wrapper.instance().unbindSimulationTick();
 
-        expect(wrapper.instance().simulation.__events['.tick']).toBe(null);
+        expect(wrapper.instance().simulation.__events.tick).toBe(null);
       });
 
       it('clears the animation frame', () => {
