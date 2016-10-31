@@ -86,6 +86,7 @@ module.exports = {
   output: {
     // The build folder.
     path: paths.appDist,
+    library: "ReactVisForce",
     libraryTarget: "umd",
     // Generated JS file names (with nested folders).
     // There will be one main bundle, and one file per asynchronous chunk.
@@ -97,7 +98,20 @@ module.exports = {
   },
 
   // exclude the peer dependencies
-  externals: peerDependencies,
+  externals: {
+   "react": {
+      root: 'React',
+      commonjs2: 'react',
+      commonjs: 'react',
+      amd: 'react'
+    },
+    'react-dom': {
+      root:'ReactDOM',
+      commonjs2: 'react-dom',
+      commonjs: 'react-dom',
+      amd:'react-dom'
+    }
+  },
 
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
