@@ -92,7 +92,7 @@ export default class InteractiveForceGraph extends PureRenderComponent {
       opacityFactor,
       children,
       className,
-      ...spreadableProps,
+      ...spreadableProps
     } = this.props;
 
     const { hoveredNode, selectedNode } = this.state;

@@ -336,7 +336,7 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
       canvasHeight, canvasWidth, minScale,
       maxScale, panLimit, onZoom, onPan, zoomSpeed,
       /* esline-enable no-unused-vars */
-      ...passthrough,
+      ...passthrough
     } = this.props;
     const { matrix, scale } = this.state;
 
