@@ -52,7 +52,7 @@ export default class ForceGraphNode extends PureRenderComponent {
       /* eslint-disable no-unused-vars */
       labelStyle, labelClass, showLabel,
       /* eslint-enable no-unused-vars */
-      ...spreadable,
+      ...spreadable
     } = this.props;
 
     const { radius = 5 } = node;
