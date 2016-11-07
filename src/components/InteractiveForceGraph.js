@@ -22,9 +22,7 @@ import React, { Children, PropTypes, cloneElement } from 'react';
 import { window } from 'global';
 
 import PureRenderComponent from './PureRenderComponent';
-import ForceGraph from './ForceGraph';
-import ForceGraphNode from './ForceGraphNode';
-import ForceGraphLink from './ForceGraphLink';
+import ForceGraph, { isNode, isLink } from './ForceGraph';
 import { nodeId } from '../utils/d3-force';
 
 const isTouch = window && 'ontouchstart' in window;
@@ -179,48 +177,42 @@ export default class InteractiveForceGraph extends PureRenderComponent {
     return (
       <ForceGraph className={`rv-force__interactive ${className}`} {...spreadableProps}>
         {Children.map(children, (child) => {
-          switch (child.type) {
-            case ForceGraphNode: {
-              const {
-                node,
-                labelStyle,
-                fontSize = fontSizeForNode(node),
-                fontWeight = fontWeightForNode(node),
-                showLabel = showLabelForNode(node),
-                onMouseEnter,
-                onMouseLeave,
-                onClick,
-              } = child.props;
+          if (isNode(child)) {
+            const {
+              node,
+              labelStyle,
+              fontSize = fontSizeForNode(node),
+              fontWeight = fontWeightForNode(node),
+              showLabel = showLabelForNode(node),
+              onMouseEnter,
+              onMouseLeave,
+              onClick,
+            } = child.props;
 
-              let { opacity } = child.props;
-              opacity = opacityForNode(node, opacity);
+            let { opacity } = child.props;
+            opacity = opacityForNode(node, opacity);
 
-              return cloneElement(child, {
-                showLabel,
+            return cloneElement(child, {
+              showLabel,
+              opacity,
+              labelStyle: {
+                fontSize,
+                fontWeight,
                 opacity,
-                labelStyle: {
-                  fontSize,
-                  fontWeight,
-                  opacity,
-                  ...labelStyle,
-                },
-                onMouseEnter: createEventHandler('onHoverNode', node, onMouseEnter),
-                onMouseLeave: createEventHandler('onBlurNode', node, onMouseLeave),
-                onClick: createEventHandler('onClickNode', node, onClick),
-              });
-            }
+                ...labelStyle,
+              },
+              onMouseEnter: createEventHandler('onHoverNode', node, onMouseEnter),
+              onMouseLeave: createEventHandler('onBlurNode', node, onMouseLeave),
+              onClick: createEventHandler('onClickNode', node, onClick),
+            });
+          } else if (isLink(child)) {
+            const { link } = child.props;
+            let { opacity } = child.props;
+            opacity = opacityForLink(link, opacity);
 
-            case ForceGraphLink: {
-              const { link } = child.props;
-              let { opacity } = child.props;
-              opacity = opacityForLink(link, opacity);
-
-              return cloneElement(child, { opacity });
-            }
-
-            default:
-              return child;
+            return cloneElement(child, { opacity });
           }
+          return child;
         })}
       </ForceGraph>
     );

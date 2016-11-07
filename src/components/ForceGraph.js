@@ -25,11 +25,17 @@ import PureRenderComponent from './PureRenderComponent';
 import * as forceUtils from '../utils/d3-force';
 import * as rafUtils from '../utils/raf';
 
-import ForceGraphNode from './ForceGraphNode';
-import ForceGraphLink from './ForceGraphLink';
 import ZoomableSVGGroup from './ZoomableSVGGroup';
 
 import simulationPropTypes, { DEFAULT_SIMULATION_PROPS } from '../propTypes/simulation';
+
+export function isNode(child) {
+  return child.props && child.props.node;
+}
+
+export function isLink(child) {
+  return child.props && child.props.link;
+}
 
 export default class ForceGraph extends PureRenderComponent {
   static get propTypes() {
@@ -76,15 +82,10 @@ export default class ForceGraph extends PureRenderComponent {
     const data = { nodes: [], links: [] };
 
     Children.forEach(children, (child) => {
-      switch (child.type) {
-        case ForceGraphNode:
-          data.nodes.push(child.props.node);
-          break;
-        case ForceGraphLink:
-          data.links.push(child.props.link);
-          break;
-        default:
-          break;
+      if (isNode(child)) {
+        data.nodes.push(child.props.node);
+      } else if (isLink(child)) {
+        data.links.push(child.props.link);
       }
     });
 
@@ -253,65 +254,51 @@ export default class ForceGraph extends PureRenderComponent {
 
     // build up the real children to render by iterating through the provided children
     Children.forEach(children, (child, idx) => {
-      const { type } = child;
+      if (isNode(child)) {
+        const {
+          node,
+          showLabel,
+          labelClass,
+          labelStyle = {},
+          strokeWidth,
+        } = child.props;
+        const nodePosition = nodePositions[forceUtils.nodeId(node)];
 
-      switch (type) {
-        case ForceGraphNode: {
-          const {
-            node,
-            showLabel,
-            labelClass,
-            labelStyle = {},
-            strokeWidth,
-          } = child.props;
-          const nodePosition = nodePositions[forceUtils.nodeId(node)];
+        nodeElements.push(cloneElement(child, {
+          ...nodePosition,
+          strokeWidth: this.scale(strokeWidth),
+        }));
 
-          nodeElements.push(cloneElement(child, {
-            ...nodePosition,
-            strokeWidth: this.scale(strokeWidth),
-          }));
-
-          if ((showLabels || showLabel) && nodePosition) {
-            const { fontSize, ...spreadableLabelStyle } = labelStyle;
-            labelElements.push(
-              <text
-                className={`rv-force__label ${labelClass}`}
-                key={`${forceUtils.nodeId(node)}-label`}
-                x={nodePosition.cx + labelOffset.x(node)}
-                y={nodePosition.cy + labelOffset.y(node)}
-                fontSize={this.scale(fontSize)}
-                style={spreadableLabelStyle}
-              >
-                {node[labelAttr]}
-              </text>
-            );
-          }
-
-          break;
+        if ((showLabels || showLabel) && nodePosition) {
+          const { fontSize, ...spreadableLabelStyle } = labelStyle;
+          labelElements.push(
+            <text
+              className={`rv-force__label ${labelClass}`}
+              key={`${forceUtils.nodeId(node)}-label`}
+              x={nodePosition.cx + labelOffset.x(node)}
+              y={nodePosition.cy + labelOffset.y(node)}
+              fontSize={this.scale(fontSize)}
+              style={spreadableLabelStyle}
+            >
+              {node[labelAttr]}
+            </text>
+          );
         }
+      } else if (isLink(child)) {
+        const { link } = child.props;
+        const { strokeWidth } = link;
+        const linkPosition = linkPositions[forceUtils.linkId(link)];
 
-        case ForceGraphLink: {
-          const { link } = child.props;
-          const { strokeWidth } = link;
-          const linkPosition = linkPositions[forceUtils.linkId(link)];
-
-          linkElements.push(cloneElement(child, {
-            ...linkPosition,
-            strokeWidth: this.scale(strokeWidth),
-          }));
-
-          break;
-        }
-
-        default: {
-          const { props: { zoomable } } = child;
-          if (zoom && zoomable) {
-            zoomableChildren.push(cloneElement(child, { key: child.key || `zoomable-${idx}` }));
-          } else {
-            staticChildren.push(cloneElement(child, { key: child.key || `static-${idx}` }));
-          }
-
-          break;
+        linkElements.push(cloneElement(child, {
+          ...linkPosition,
+          strokeWidth: this.scale(strokeWidth),
+        }));
+      } else {
+        const { props: { zoomable } } = child;
+        if (zoom && zoomable) {
+          zoomableChildren.push(cloneElement(child, { key: child.key || `zoomable-${idx}` }));
+        } else {
+          staticChildren.push(cloneElement(child, { key: child.key || `static-${idx}` }));
         }
       }
     });
