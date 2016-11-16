@@ -116,7 +116,8 @@ export default class InteractiveForceGraph extends PureRenderComponent {
     const isNodeHighlighted = (focusedNode, node) =>
       focusedNode && (
         (nodeId(focusedNode) === nodeId(node)) ||
-        (highlightDependencies && areNodesRelatives(node, focusedNode))
+        (selectedNode && nodeId(selectedNode) === nodeId(node)) ||
+        (highlightDependencies && areNodesRelatives(node, selectedNode || focusedNode))
       );
 
     const isLinkHighlighted = (focusedNode, link) =>
@@ -157,7 +158,7 @@ export default class InteractiveForceGraph extends PureRenderComponent {
     const opacityForLink = (link, origOpacity = 1) => {
       if (
         highlightDependencies ? (
-          (hoveredNode && !isLinkHighlighted(hoveredNode, link)) ||
+          (!selectedNode && hoveredNode && !isLinkHighlighted(hoveredNode, link)) ||
           (selectedNode && !isLinkHighlighted(selectedNode, link))
         ) : (hoveredNode || selectedNode)
       ) {
