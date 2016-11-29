@@ -30,11 +30,10 @@ export default function setsEqual(setA, setB) {
     return false;
   }
 
-  for (const a of setA) {
-    if (!setB.has(a)) {
-      return false;
-    }
-  }
+  let acc = true;
+  setA.forEach((a) => {
+    acc = acc && setB.has(a);
+  });
 
-  return true;
+  return acc;
 }
