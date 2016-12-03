@@ -4,7 +4,7 @@
 
 ```javascript
 import React from 'react';
-import { ForceGraph, ForceGraphNode, ForceGraphLink } from 'react-vis-force';
+import { InteractiveForceGraph, ForceGraphNode, ForceGraphLink } from 'react-vis-force';
 
 <InteractiveForceGraph
   simulationOptions={{ height: 300, width: 300 }}
