@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Uber Technologies, Inc.
+// Copyright (c) 2017 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,6 +37,15 @@ export function isLink(child) {
   return child.props && child.props.link;
 }
 
+const zoomPropTypes = PropTypes.shape({
+  zoomSpeed: PropTypes.number,
+  minScale: PropTypes.number,
+  maxScale: PropTypes.number,
+  panLimit: PropTypes.number,
+  onZoom: PropTypes.func,
+  onPan: PropTypes.func,
+});
+
 export default class ForceGraph extends PureRenderComponent {
   static get propTypes() {
     return {
@@ -44,10 +53,7 @@ export default class ForceGraph extends PureRenderComponent {
 
       // zoom and pan
       zoom: PropTypes.bool,
-      minScale: PropTypes.number,
-      maxScale: PropTypes.number,
-      onZoom: PropTypes.func,
-      onPan: PropTypes.func,
+      zoomOptions: zoomPropTypes,
 
       // create custom simulations
       createSimulation: PropTypes.func,
@@ -73,8 +79,7 @@ export default class ForceGraph extends PureRenderComponent {
         y: ({ radius = 5 }) => -radius / 4,
       },
       showLabels: false,
-      onZoom() {},
-      onPan() {},
+      zoomOptions: {},
     };
   }
 
@@ -170,12 +175,14 @@ export default class ForceGraph extends PureRenderComponent {
   }
 
   onZoom(event, scale, ...args) {
-    this.props.onZoom(event, scale, ...args);
+    const { zoomOptions: { onZoom: _onZoom = () => {} } } = this.props;
+    _onZoom(event, scale, ...args);
     this.setState({ scale });
   }
 
   onPan(...args) {
-    this.props.onPan(...args);
+    const { zoomOptions: { onPan: _onPan = () => {} } } = this.props;
+    _onPan(...args);
   }
 
   getDataFromChildren(props = this.props, force = false) {
@@ -231,9 +238,8 @@ export default class ForceGraph extends PureRenderComponent {
       labelOffset,
       showLabels,
       simulationOptions,
+      zoomOptions,
       zoom,
-      minScale,
-      maxScale,
     } = this.props;
 
     const {
@@ -266,6 +272,7 @@ export default class ForceGraph extends PureRenderComponent {
 
         nodeElements.push(cloneElement(child, {
           ...nodePosition,
+          scale: this.state.scale,
           strokeWidth: this.scale(strokeWidth),
         }));
 
@@ -310,8 +317,7 @@ export default class ForceGraph extends PureRenderComponent {
           disabled={!zoom}
           height={height}
           width={width}
-          minScale={minScale}
-          maxScale={maxScale}
+          {...zoomOptions}
           onZoom={(...args) => this.onZoom(...args)}
           onPan={(...args) => this.onPan(...args)}
         >

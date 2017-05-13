@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Uber Technologies, Inc.
+// Copyright (c) 2017 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -181,12 +181,12 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
   }
 
   panBy(clientX, clientY, event) {
-    const { width, height, panLimit } = this.props;
+    // const { width, height, panLimit } = this.props;
     const {
       matrix: prevMatrix,
       dragX: prevDragX,
       dragY: prevDragY,
-      scale,
+      // scale,
     } = this.state;
 
     const dx = clientX - prevDragX;
@@ -196,12 +196,18 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
 
     // check that we aren't passing the panLimit
     // TODO this feels a little janky in practice
-    if (
-      (Math.abs(newX / scale)) > (width * panLimit) ||
-      (Math.abs(newY / scale)) > (height * panLimit)
-    ) {
-      return;
-    }
+    // This doesn't work well for data that exceeds the canvas size. The limit
+    // here assumes the data fits in side of the canvas at scale >= 1. Ideally,
+    // the pan limit would hault at (width|height / 2) + border node position.
+    // It is probably better to have unlimited panning than to prematurely block
+    // panning and hide data.
+
+    // if (
+    //   (Math.abs(newX / scale)) > (width * panLimit) ||
+    //   (Math.abs(newY / scale)) > (height * panLimit)
+    // ) {
+    //   return;
+    // }
 
     this.setState({
       dragX: clientX,
