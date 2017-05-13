@@ -157,8 +157,7 @@ storiesOf('<ForceGraph />', module)
         zoom
         minScale={0.25}
         maxScale={5}
-        onZoom={action('zoomed')}
-        onPan={action('panned')}
+	zoomOptions={{onZoom: action('zoomed'), onPan: action('panned')}}
       >
         {lesMisJSON.nodes.map(node => (
           <ForceGraphNode
