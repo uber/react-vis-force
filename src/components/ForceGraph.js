@@ -41,7 +41,6 @@ const zoomPropTypes = PropTypes.shape({
   zoomSpeed: PropTypes.number,
   minScale: PropTypes.number,
   maxScale: PropTypes.number,
-  panLimit: PropTypes.number,
   onZoom: PropTypes.func,
   onPan: PropTypes.func,
 });
