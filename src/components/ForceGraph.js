@@ -19,6 +19,7 @@
 // THE SOFTWARE.
 
 import React, { PropTypes, Children, cloneElement } from 'react';
+import { reduce } from 'lodash';
 
 import './ForceGraph.css';
 import PureRenderComponent from './PureRenderComponent';
@@ -41,6 +42,7 @@ const zoomPropTypes = PropTypes.shape({
   zoomSpeed: PropTypes.number,
   minScale: PropTypes.number,
   maxScale: PropTypes.number,
+  panLimit: PropTypes.number,
   onZoom: PropTypes.func,
   onPan: PropTypes.func,
 });
@@ -256,7 +258,10 @@ export default class ForceGraph extends PureRenderComponent {
     const linkElements = [];
     const zoomableChildren = [];
     const staticChildren = [];
-
+    const maxPanWidth = reduce(nodePositions, (maxWidth, { cx }) =>
+      (maxWidth > Math.abs(cx) ? maxWidth : Math.abs(cx)), 0);
+    const maxPanHeight = reduce(nodePositions, (maxHeight, { cy }) =>
+      (maxHeight > Math.abs(cy) ? maxHeight : Math.abs(cy)), 0);
     // build up the real children to render by iterating through the provided children
     Children.forEach(children, (child, idx) => {
       if (isNode(child)) {
@@ -314,8 +319,8 @@ export default class ForceGraph extends PureRenderComponent {
         <g className="rv-force__static-elements">{staticChildren}</g>
         <ZoomableSVGGroup
           disabled={!zoom}
-          height={height}
-          width={width}
+          height={maxPanHeight}
+          width={maxPanWidth}
           {...zoomOptions}
           onZoom={(...args) => this.onZoom(...args)}
           onPan={(...args) => this.onPan(...args)}
