@@ -18,15 +18,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import PureRenderComponent from './PureRenderComponent';
 import linkPropTypes from '../propTypes/link';
+import { linkId } from '../utils/d3-force';
+import ForceGraphLink from './ForceGraphLink';
 
 export default class ForceGraphArrowLink extends PureRenderComponent {
   static get propTypes() {
     return {
       link: linkPropTypes.isRequired,
+      targetRadius: PropTypes.number,
     };
   }
 
@@ -35,37 +38,38 @@ export default class ForceGraphArrowLink extends PureRenderComponent {
       className: '',
       opacity: 0.6,
       stroke: '#999',
+      targetRadius: 2,
+      strokeWidth: 1,
     };
   }
 
   render() {
-    const { link, strokeWidth, className, targetRadius, ...spreadable } = this.props;
-    const { x1, x2, y1, y2 } = spreadable;
-    if (x1 && !isNaN(x1) &&
-        x2 && !isNaN(x2) &&
-        y1 && !isNaN(y1) &&
-        y2 && !isNaN(y2) &&
-        targetRadius && !isNaN(targetRadius)) {
-      // Total difference in x and y from source to target
-      const diffX = x2 - x1;
-      const diffY = y2 - y1;
+    const { link, targetRadius, ...spreadable } = this.props;
+    const id = `arrow-${linkId(link)}`;
 
-      // Length of path from center of source node to center of target node
-      const pathLength = Math.sqrt((diffX * diffX) + (diffY * diffY));
-
-      // x and y distances from center to outside edge of target node
-      const offsetX = (diffX * targetRadius) / pathLength;
-      const offsetY = (diffY * targetRadius) / pathLength;
-      if (pathLength !== 0) {
-        spreadable.d = `M${x1},${y1}L${x2 - offsetX},${y2 - offsetY}`;
-      }
-    }
     return (
-      <path
-        className={`rv-force__link ${className}`}
-        strokeWidth={strokeWidth || Math.sqrt(link.value)}
-        {...spreadable}
-      />
+      <g>
+        <defs>
+          <marker
+            id={id}
+            markerWidth={(targetRadius * 3) + 1}
+            markerHeight={(targetRadius * 3) + 1}
+            refX={(targetRadius * 3) + 1}
+            refY={targetRadius}
+            orient="auto"
+            markerUnits="strokeWidth"
+          >
+            {targetRadius > 0 && (
+              <path
+                d={`M0,0 L0,${targetRadius * 2} L${targetRadius * 3},${targetRadius} z`}
+                fill={spreadable.stroke || spreadable.color}
+              />
+            )}
+          </marker>
+        </defs>
+
+        <ForceGraphLink {...this.props} edgeOffset={targetRadius} markerEnd={`url(#${id})`} />
+      </g>
     );
   }
 }

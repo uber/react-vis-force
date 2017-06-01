@@ -76,6 +76,29 @@ const tenChildren = [
   <ForceGraphLink link={{ source: 'tenth-node', target: 'fifth-node' }} />,
 ].map(attachEvents);
 
+const tenChildrenArrows = [
+  <ForceGraphNode node={{ id: 'first-node'}} fill="#11939A" />,
+  <ForceGraphNode node={{ id: 'second-node'}} fill="#47d3d9" />,
+  <ForceGraphNode node={{ id: 'third-node'}} fill="#11939A" />,
+  <ForceGraphNode node={{ id: 'fourth-node'}} fill="#47d3d9" />,
+  <ForceGraphNode node={{ id: 'fifth-node'}} fill="#11939A" />,
+  <ForceGraphNode node={{ id: 'sixth-node'}} fill="#47d3d9" />,
+  <ForceGraphNode node={{ id: 'seventh-node'}} fill="#11939A" />,
+  <ForceGraphNode node={{ id: 'eighth-node'}} fill="#47d3d9" />,
+  <ForceGraphNode node={{ id: 'ninth-node'}} fill="#11939A" />,
+  <ForceGraphNode node={{ id: 'tenth-node'}} fill="#47d3d9" />,
+  <ForceGraphArrowLink link={{ source: 'first-node', target: 'second-node' }} />,
+  <ForceGraphArrowLink link={{ source: 'third-node', target: 'second-node' }} />,
+  <ForceGraphArrowLink link={{ source: 'third-node', target: 'fourth-node' }} />,
+  <ForceGraphArrowLink link={{ source: 'fifth-node', target: 'fourth-node' }} />,
+  <ForceGraphArrowLink link={{ source: 'fifth-node', target: 'fourth-node' }} />,
+  <ForceGraphArrowLink link={{ source: 'sixth-node', target: 'fourth-node' }} />,
+  <ForceGraphArrowLink link={{ source: 'seventh-node', target: 'fourth-node' }} />,
+  <ForceGraphArrowLink link={{ source: 'eighth-node', target: 'fourth-node' }} />,
+  <ForceGraphArrowLink link={{ source: 'ninth-node', target: 'tenth-node' }} />,
+  <ForceGraphArrowLink link={{ source: 'tenth-node', target: 'fifth-node' }} />,
+].map(attachEvents);
+
 storiesOf('<ForceGraph />', module)
   .add('two nodes', () => (
     <ForceGraph>{twoChildren}</ForceGraph>
@@ -118,6 +141,15 @@ storiesOf('<ForceGraph />', module)
   .add('arrow links', () => (
     <ForceGraph>
       {twoChildrenArrow}
+    </ForceGraph>
+  ))
+  .add('10 nodes (with arrows)', () => (
+    <ForceGraph simulationOptions={{
+      strength: {
+        collide: 10,
+      }
+    }}>
+      {tenChildrenArrows}
     </ForceGraph>
   ))
   .add('Characters from Les Mis', () => {
