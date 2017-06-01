@@ -21,6 +21,7 @@
 import React, { cloneElement } from 'react';
 import { storiesOf, action } from '@kadira/storybook';
 import { scaleCategory20 } from 'd3-scale';
+import { withState } from 'recompose';
 
 import {
   InteractiveForceGraph,
@@ -267,6 +268,56 @@ storiesOf('<ForceGraph />', module)
         {tenChildren}
       </InteractiveForceGraph>
     ))
+    .add('10 nodes (managed selection)', (...args) => {
+      const ids = [
+        'first-node',
+        'second-node',
+        'third-node',
+        'fourth-node',
+        'fifth-node',
+        'sixth-node',
+        'seventh-node',
+        'eighth-node',
+        'ninth-node',
+        'tenth-node',
+      ];
+      const ManagedForceGraph = withState('selection', 'updateSelection', null)(
+        ({ selection, updateSelection }) => (
+          <div>
+            <div style={{position: 'absolute', top: '1em', left: '1em'}}>
+              <button type="button" onClick={() => {
+                const randomIdx = Math.floor(Math.random() * ids.length);
+                action('trying to pick', randomIdx);
+                updateSelection({id: ids[randomIdx]});
+              }}>
+                {'Pick random selection'}
+              </button>
+              <button type="button" onClick={() => {
+                action('trying to clear selection');
+                updateSelection(null);
+              }}>
+                {'Clear selection'}
+              </button>
+            </div>
+            <InteractiveForceGraph
+              selectedNode={selection}
+              onSelectNode={(ev, newValue) => {
+                action('node selected');
+                updateSelection(newValue);
+              }}
+              onDeselectNode={(ev, newValue) => {
+                action('node deselected');
+                updateSelection(null);
+              }}
+            >
+              {tenChildren}
+            </InteractiveForceGraph>
+          </div>
+        )
+      );
+
+      return <ManagedForceGraph />;
+    })
     .add('labelled nodes', () => (
       <InteractiveForceGraph
         showLabels

@@ -27,12 +27,15 @@ import { nodeId } from '../utils/d3-force';
 
 const isTouch = window && 'ontouchstart' in window;
 
+const selectedNodeShape = PropTypes.shape({
+  id: PropTypes.string,
+});
+
 export default class InteractiveForceGraph extends PureRenderComponent {
   static get propTypes() {
     return Object.assign({
-      defaultSelectedNode: PropTypes.shape({
-        id: PropTypes.string,
-      }),
+      selectedNode: selectedNodeShape,
+      defaultSelectedNode: selectedNodeShape,
       highlightDependencies: PropTypes.bool,
       opacityFactor: PropTypes.number,
       onSelectNode: PropTypes.func,
@@ -55,8 +58,14 @@ export default class InteractiveForceGraph extends PureRenderComponent {
 
     this.state = {
       hoveredNode: null,
-      selectedNode: props.defaultSelectedNode,
+      selectedNode: props.selectedNode || props.defaultSelectedNode,
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (Object.prototype.hasOwnProperty.call(nextProps, 'selectedNode')) {
+      this.setState({ selectedNode: nextProps.selectedNode });
+    }
   }
 
   onHoverNode(event, hoveredNode) {
@@ -90,11 +99,14 @@ export default class InteractiveForceGraph extends PureRenderComponent {
       opacityFactor,
       children,
       className,
+      selectedNode: propsSelectedNode,
       ...spreadableProps
     } = this.props;
 
-    const { hoveredNode, selectedNode } = this.state;
+    const { hoveredNode, selectedNode: stateSelectedNode } = this.state;
     const { links } = ForceGraph.getDataFromChildren(children);
+
+    const selectedNode = propsSelectedNode || stateSelectedNode;
 
     const applyOpacity = (opacity = 1) => opacity / opacityFactor;
 
