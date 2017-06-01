@@ -50,6 +50,7 @@
     "react-dev-utils": "^0.2.1",
     "react-dom": "^15.3.1",
     "react-prism": "^4.0.0",
+    "recompose": "^0.23.4",
     "recursive-readdir": "2.1.0",
     "rimraf": "2.5.4",
     "sinon": "^1.17.6",
