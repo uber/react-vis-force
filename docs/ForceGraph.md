@@ -22,14 +22,13 @@ import { ForceGraph, ForceGraphNode, ForceGraphLink } from 'react-vis-force';
 ### zoom
 When true, wraps the ForceGraph in a [`<ZoomableSVGGroup />`](https://github.com/uber/react-vis-force/blob/master/src/components/ZoomableSVGGroup.js). Any children that are not `<ForceGraphNode />` or `<ForceGraphLink />` can use the `zoomable` prop to opt them in or out of the `<ZoomableSVGGroup />`.
 
-### minScale
-Minimum zooming scale as a multiplication factor. Ex. `0.5`
-
-### maxScale
-Maximum zooming scale as a multiplication factor. Ex. `4`
-
-### onZoom(event, scale)
-Called each time the zoom scale changes.
+### zoomOptions
+An object of options to pass into d3-force.
+* *number* minScale
+* *number* maxScale
+* *number* zoomSpeed
+* *function* onZoom(event: *TouchMoveEvent*, scale: *number*)
+* *function* onPan(event: *MouseMoveEvent*, newX: *number*, newY: *number*)
 
 ### simulationOptions
 An object of options to pass into d3-force.

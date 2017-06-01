@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Uber Technologies, Inc.
+// Copyright (c) 2017 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -425,15 +425,27 @@ describe('<ForceGraph />', () => {
         expect(wrapper.state('scale')).toBe(2);
       });
 
-      it('calls props.onZoom', () => {
+      it('calls props.zoomOptions.onZoom', () => {
         // could not get jest.fn() to work...
         const onZoom = sinon.spy();
-        const wrapper = shallow(<ForceGraph {...defaultProps} zoom onZoom={onZoom} />);
+        const wrapper = shallow(<ForceGraph {...defaultProps} zoom zoomOptions={{ onZoom }} />);
         const event = { clientX: 100 };
 
         wrapper.instance().onZoom(event, 2, true);
 
         expect(onZoom.calledWith(event, 2, true)).toBe(true);
+      });
+    });
+
+    describe('onPan()', () => {
+      it('calls props.zoomOptions.onPan', () => {
+        const onPan = sinon.spy();
+        const wrapper = shallow(<ForceGraph {...defaultProps} zoom zoomOptions={{ onPan }} />);
+        const event = {};
+
+        wrapper.instance().onPan(event, 2, 3);
+
+        expect(onPan.calledWith(event, 2, 3)).toBe(true);
       });
     });
 

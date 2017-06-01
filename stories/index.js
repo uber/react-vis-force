@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Uber Technologies, Inc.
+// Copyright (c) 2017 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -172,10 +172,7 @@ storiesOf('<ForceGraph />', module)
     return (
       <ForceGraph
         zoom
-        minScale={0.25}
-        maxScale={5}
-        onZoom={action('zoomed')}
-        onPan={action('panned')}
+	zoomOptions={{minScale: 0.25, maxScale: 5, onZoom: action('zoomed'), onPan: action('panned')}}
       >
         {lesMisJSON.nodes.map(node => (
           <ForceGraphNode
