@@ -22,7 +22,13 @@ import React, { cloneElement } from 'react';
 import { storiesOf, action } from '@kadira/storybook';
 import { scaleCategory20 } from 'd3-scale';
 
-import { InteractiveForceGraph, ForceGraph, ForceGraphNode, ForceGraphLink } from '../src/';
+import {
+  InteractiveForceGraph,
+  ForceGraph,
+  ForceGraphNode,
+  ForceGraphLink,
+  ForceGraphArrowLink
+} from '../src/';
 import lesMisJSON from './les-miserables.json';
 
 import './demo-styles.css';
@@ -39,6 +45,12 @@ const twoChildren = [
   <ForceGraphNode node={{ id: 'first-node' }} fill="#11939A" />,
   <ForceGraphNode node={{ id: 'second-node' }} fill="#47d3d9" />,
   <ForceGraphLink link={{ source: 'first-node', target: 'second-node' }} />,
+].map(attachEvents);
+
+const twoChildrenArrow = [
+  <ForceGraphNode node={{ id: 'first-node' }} fill="#11939A" />,
+  <ForceGraphNode node={{ id: 'second-node' }} fill="#47d3d9" />,
+  <ForceGraphArrowLink targetRadius={2} link={{ source: 'first-node', target: 'second-node' }} />,
 ].map(attachEvents);
 
 const tenChildren = [
@@ -101,6 +113,11 @@ storiesOf('<ForceGraph />', module)
   .add('labelled nodes', () => (
     <ForceGraph showLabels>
       {twoChildren}
+    </ForceGraph>
+  ))
+  .add('arrow links', () => (
+    <ForceGraph>
+      {twoChildrenArrow}
     </ForceGraph>
   ))
   .add('Characters from Les Mis', () => {
