@@ -319,8 +319,8 @@ export default class ForceGraph extends PureRenderComponent {
         <g className="rv-force__static-elements">{staticChildren}</g>
         <ZoomableSVGGroup
           disabled={!zoom}
-          height={height}
-          width={width}
+          height={maxPanHeight}
+          width={maxPanWidth}
           {...zoomOptions}
           onZoom={(...args) => this.onZoom(...args)}
           onPan={(...args) => this.onPan(...args)}
