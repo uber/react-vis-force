@@ -1,6 +1,6 @@
 {
   "name": "react-vis-force",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "main": "./dist/react-vis-force.js",
   "homepage": "http://uber.github.io/react-vis-force",
   "licence": "MIT",
