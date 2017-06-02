@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 import React, { PropTypes, Children, cloneElement } from 'react';
-import { reduce } from 'lodash';
+import reduce from 'lodash.reduce';
 
 import './ForceGraph.css';
 import PureRenderComponent from './PureRenderComponent';
