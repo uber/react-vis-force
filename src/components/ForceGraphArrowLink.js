@@ -18,14 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, { PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
-import PureRenderComponent from './PureRenderComponent';
 import linkPropTypes from '../propTypes/link';
 import { linkId } from '../utils/d3-force';
 import ForceGraphLink from './ForceGraphLink';
 
-export default class ForceGraphArrowLink extends PureRenderComponent {
+export default class ForceGraphArrowLink extends PureComponent {
   static get propTypes() {
     return {
       link: linkPropTypes.isRequired,

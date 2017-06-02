@@ -18,16 +18,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, { PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
-import PureRenderComponent from './PureRenderComponent';
 import linkPropTypes from '../propTypes/link';
 
-export default class ForceGraphLink extends PureRenderComponent {
+export default class ForceGraphLink extends PureComponent {
   static get propTypes() {
     return {
       link: linkPropTypes.isRequired,
       edgeOffset: PropTypes.number,
+      strokeWidth: PropTypes.number,
+      className: PropTypes.string,
     };
   }
 
