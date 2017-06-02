@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "main": "./dist/react-vis-force.js",
   "homepage": "http://uber.github.io/react-vis-force",
-  "licence": "MIT",
+  "license": "MIT",
   "devDependencies": {
     "@kadira/storybook": "^2.21.0",
     "autoprefixer": "6.4.1",
@@ -57,7 +57,7 @@
     "sinon": "^1.17.6",
     "strip-ansi": "3.0.1",
     "style-loader": "0.13.1",
-    "uber-licence": "^2.0.2",
+    "uber-licence": "^3.1.1",
     "url-loader": "0.5.7",
     "webpack": "1.13.2",
     "webpack-dev-server": "1.16.1",
