@@ -28,7 +28,10 @@ Called each time the user selects a new node.
 ### onDeselectNode(event, node)
 Called each time the user deselects a node.
 
-### defaultSelectedNode(node)
+### selectedNode
+The node to set to use as selected, if you want to treat the `<InteractiveForceGraph />` as a managed component.
+
+### defaultSelectedNode
 The node to set as selected by default.
 
 ### highlightDependencies
