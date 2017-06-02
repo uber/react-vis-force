@@ -18,17 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, { PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
-import PureRenderComponent from './PureRenderComponent';
 import nodePropTypes from '../propTypes/node';
 
-export default class ForceGraphNode extends PureRenderComponent {
+export default class ForceGraphNode extends PureComponent {
   static get propTypes() {
     return {
       node: nodePropTypes.isRequired,
       cx: PropTypes.number,
       cy: PropTypes.number,
+      r: PropTypes.number,
+      className: PropTypes.string,
       // these props only have an impact on the parent.
       labelStyle: PropTypes.object,
       labelClass: PropTypes.string,

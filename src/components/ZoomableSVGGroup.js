@@ -18,9 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, { PropTypes } from 'react';
-
-import PureRenderComponent from './PureRenderComponent';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 export const ZOOMABLE_SVG_GROUP_EVENT_NAMES = [
   'onMouseDown',
@@ -37,7 +36,7 @@ export const ZOOMABLE_SVG_GROUP_EVENT_NAMES = [
  * This component draws upon the patterns in https://github.com/anvaka/panzoom
  * and applies them to a simple React component that can wrap SVG children.
  */
-export default class ZoomableSVGGroup extends PureRenderComponent {
+export default class ZoomableSVGGroup extends PureComponent {
   static get propTypes() {
     return {
       width: PropTypes.number.isRequired,
@@ -118,109 +117,6 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
 
   componentDidMount() {
     this.setInitialMatrix();
-  }
-
-  setInitialMatrix() {
-    const parentSvg = this.el.ownerSVGElement;
-    const transform = parentSvg.createSVGTransform();
-
-    this.setState({
-      scale: 1,
-      matrix: [
-        transform.matrix.a,
-        transform.matrix.b,
-        transform.matrix.c,
-        transform.matrix.d,
-        transform.matrix.e,
-        transform.matrix.f,
-      ],
-    });
-  }
-
-  // based on the method of the same name from panzoom
-  // https://github.com/anvaka/panzoom/blob/master/index.js
-  getScaleMultiplier(delta) {
-    const { zoomSpeed } = this.props;
-
-    if (delta > 0) {
-      return 1 - zoomSpeed;
-    } else if (delta < 0) {
-      return 1 + zoomSpeed;
-    }
-
-    return 1;
-  }
-
-  // based on the zoomTo method from the panzoom project
-  // https://github.com/anvaka/panzoom/blob/master/lib/zoomTo.js
-  zoomTo(clientX, clientY, scaleMultiplier, event) {
-    const prevMatrix = this.state.matrix;
-    const prevScale = this.state.scale;
-    const scale = prevScale * scaleMultiplier;
-    const clientMatrix = this.el.ownerSVGElement.getScreenCTM();
-
-    const x = (clientX * clientMatrix.a) - clientMatrix.e;
-    const y = (clientY * clientMatrix.d) - clientMatrix.f;
-
-    // guardrails for scale max and min
-    if (scale > this.props.maxScale || scale < this.props.minScale) {
-      return;
-    }
-
-    this.setState({
-      scale,
-      matrix: [
-        scale,
-        prevMatrix[1],
-        prevMatrix[2],
-        scale,
-        x - (scaleMultiplier * (x - prevMatrix[4])),
-        y - (scaleMultiplier * (y - prevMatrix[5])),
-      ],
-    }, () => this.props.onZoom(event, scale));
-  }
-
-  panBy(clientX, clientY, event) {
-    const { width, height, panLimit } = this.props;
-    const {
-      matrix: prevMatrix,
-      dragX: prevDragX,
-      dragY: prevDragY,
-      scale,
-    } = this.state;
-
-    const dx = clientX - prevDragX;
-    const dy = clientY - prevDragY;
-    const newX = prevMatrix[4] + dx;
-    const newY = prevMatrix[5] + dy;
-
-    // check that we aren't passing the panLimit
-    // TODO this feels a little janky in practice
-    // This doesn't work well for data that exceeds the canvas size. The limit
-    // here assumes the data fits in side of the canvas at scale >= 1. Ideally,
-    // the pan limit would hault at (width|height / 2) + border node position.
-    // It is probably better to have unlimited panning than to prematurely block
-    // panning and hide data.
-
-    if (
-      (Math.abs(newX / scale)) > (width * panLimit) ||
-      (Math.abs(newY / scale)) > (height * panLimit)
-    ) {
-      return;
-    }
-
-    this.setState({
-      dragX: clientX,
-      dragY: clientY,
-      matrix: [
-        prevMatrix[0],
-        prevMatrix[1],
-        prevMatrix[2],
-        prevMatrix[3],
-        newX,
-        newY,
-      ],
-    }, () => this.props.onPan(event, newX, newY));
   }
 
   onMouseDown(event) {
@@ -327,6 +223,109 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
       event.preventDefault();
       this.zoomTo(clientX, clientY, scaleMultiplier, event);
     }
+  }
+
+  setInitialMatrix() {
+    const parentSvg = this.el.ownerSVGElement;
+    const transform = parentSvg.createSVGTransform();
+
+    this.setState({
+      scale: 1,
+      matrix: [
+        transform.matrix.a,
+        transform.matrix.b,
+        transform.matrix.c,
+        transform.matrix.d,
+        transform.matrix.e,
+        transform.matrix.f,
+      ],
+    });
+  }
+
+  // based on the method of the same name from panzoom
+  // https://github.com/anvaka/panzoom/blob/master/index.js
+  getScaleMultiplier(delta) {
+    const { zoomSpeed } = this.props;
+
+    if (delta > 0) {
+      return 1 - zoomSpeed;
+    } else if (delta < 0) {
+      return 1 + zoomSpeed;
+    }
+
+    return 1;
+  }
+
+  // based on the zoomTo method from the panzoom project
+  // https://github.com/anvaka/panzoom/blob/master/lib/zoomTo.js
+  zoomTo(clientX, clientY, scaleMultiplier, event) {
+    const prevMatrix = this.state.matrix;
+    const prevScale = this.state.scale;
+    const scale = prevScale * scaleMultiplier;
+    const clientMatrix = this.el.ownerSVGElement.getScreenCTM();
+
+    const x = (clientX * clientMatrix.a) - clientMatrix.e;
+    const y = (clientY * clientMatrix.d) - clientMatrix.f;
+
+    // guardrails for scale max and min
+    if (scale > this.props.maxScale || scale < this.props.minScale) {
+      return;
+    }
+
+    this.setState({
+      scale,
+      matrix: [
+        scale,
+        prevMatrix[1],
+        prevMatrix[2],
+        scale,
+        x - (scaleMultiplier * (x - prevMatrix[4])),
+        y - (scaleMultiplier * (y - prevMatrix[5])),
+      ],
+    }, () => this.props.onZoom(event, scale));
+  }
+
+  panBy(clientX, clientY, event) {
+    const { width, height, panLimit } = this.props;
+    const {
+      matrix: prevMatrix,
+      dragX: prevDragX,
+      dragY: prevDragY,
+      scale,
+    } = this.state;
+
+    const dx = clientX - prevDragX;
+    const dy = clientY - prevDragY;
+    const newX = prevMatrix[4] + dx;
+    const newY = prevMatrix[5] + dy;
+
+    // check that we aren't passing the panLimit
+    // TODO this feels a little janky in practice
+    // This doesn't work well for data that exceeds the canvas size. The limit
+    // here assumes the data fits in side of the canvas at scale >= 1. Ideally,
+    // the pan limit would hault at (width|height / 2) + border node position.
+    // It is probably better to have unlimited panning than to prematurely block
+    // panning and hide data.
+
+    if (
+      (Math.abs(newX / scale)) > (width * panLimit) ||
+      (Math.abs(newY / scale)) > (height * panLimit)
+    ) {
+      return;
+    }
+
+    this.setState({
+      dragX: clientX,
+      dragY: clientY,
+      matrix: [
+        prevMatrix[0],
+        prevMatrix[1],
+        prevMatrix[2],
+        prevMatrix[3],
+        newX,
+        newY,
+      ],
+    }, () => this.props.onPan(event, newX, newY));
   }
 
   render() {

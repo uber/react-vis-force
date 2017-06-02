@@ -18,11 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, { PropTypes, Children, cloneElement } from 'react';
+import React, { PureComponent, Children, cloneElement } from 'react';
+import PropTypes from 'prop-types';
 import reduce from 'lodash.reduce';
 
 import './ForceGraph.css';
-import PureRenderComponent from './PureRenderComponent';
 import * as forceUtils from '../utils/d3-force';
 import * as rafUtils from '../utils/raf';
 
@@ -47,10 +47,11 @@ const zoomPropTypes = PropTypes.shape({
   onPan: PropTypes.func,
 });
 
-export default class ForceGraph extends PureRenderComponent {
+export default class ForceGraph extends PureComponent {
   static get propTypes() {
     return {
       children: PropTypes.any,
+      className: PropTypes.string,
 
       // zoom and pan
       zoom: PropTypes.bool,

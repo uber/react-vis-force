@@ -18,10 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, { Children, PropTypes, cloneElement } from 'react';
+import React, { PureComponent, Children, cloneElement } from 'react';
+import PropTypes from 'prop-types';
 import { window } from 'global';
 
-import PureRenderComponent from './PureRenderComponent';
 import ForceGraph, { isNode, isLink } from './ForceGraph';
 import { nodeId } from '../utils/d3-force';
 
@@ -31,7 +31,7 @@ const selectedNodeShape = PropTypes.shape({
   id: PropTypes.string,
 });
 
-export default class InteractiveForceGraph extends PureRenderComponent {
+export default class InteractiveForceGraph extends PureComponent {
   static get propTypes() {
     return Object.assign({
       selectedNode: selectedNodeShape,
