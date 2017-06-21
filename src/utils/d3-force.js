@@ -136,6 +136,7 @@ function applyLinkForce(simulation, {
   data: { nodes, links },
   linkAttrs = [],
   nodeAttrs = [],
+  distance,
 }) {
   // setup the link force if it isn't already set up
   if (!simulation.force('link')) {
@@ -158,6 +159,9 @@ function applyLinkForce(simulation, {
   const newLinksSet = new Set(links.map(linkId));
   if (!setsEqual(prevLinksSet, newLinksSet)) {
     simulation.shouldRun = true;
+    if (distance) {
+      simulation.force('link').distance(distance);
+    }
     simulation.force('link').links(
       pick(links, 'source', 'target', 'value', ...linkAttrs)
     );
