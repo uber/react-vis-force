@@ -249,6 +249,7 @@ export function createSimulation(options) {
  * @param {object} options.data
  * @param {array} options.data.nodes
  * @param {array} options.data.links
+ * @param {function|number} [options.distance]
  * @param {object} [options.strength]
  * @param {function|number} [options.strength.charge]
  * @param {function|number} [options.strength.collide]

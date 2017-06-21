@@ -35,6 +35,7 @@ An object of options to pass into d3-force.
 * *boolean* animate
 * *number* height
 * *number* width
+* *function|number* distance (see [d3-force distance docs](https://github.com/d3/d3-force#link_distance))
 * *object* strength (see strengths in the [d3-force documentation](https://github.com/d3/d3-force#collide_strength))
   * *function|number* strength.charge
   * *function|number* strength.collide
