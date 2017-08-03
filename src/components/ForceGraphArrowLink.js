@@ -68,7 +68,7 @@ export default class ForceGraphArrowLink extends PureComponent {
           </marker>
         </defs>
 
-        <ForceGraphLink {...this.props} edgeOffset={targetRadius} markerEnd={`url(#${id})`} />
+        <ForceGraphLink {...spreadable} link={link} edgeOffset={targetRadius} markerEnd={`url(#${id})`} />
       </g>
     );
   }
