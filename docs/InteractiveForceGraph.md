@@ -18,6 +18,22 @@ import { InteractiveForceGraph, ForceGraphNode, ForceGraphLink } from 'react-vis
 </InteractiveForceGraph>
 ```
 
+**Important note:** 
+If the graph moves off the canvas in the upper-left, you need to set ```alpha``` in ```simulationOptions``` to ```1```.
+For example, using the example above:
+```
+<InteractiveForceGraph
+  simulationOptions={{ height: 300, width: 300, **alpha:1** }}
+  labelAttr="label"
+  onSelectNode={(node) => console.log(node)}
+  highlightDependencies
+>
+
+....
+(Rest of the code)
+```
+
+
 ## Props
 
 `<InteractiveForceGraph />` inherits all of the props from [`<ForceGraph />`](ForceGraph.md), and adds:
