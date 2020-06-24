@@ -9,7 +9,7 @@ import { InteractiveForceGraph, ForceGraphNode, ForceGraphLink } from 'react-vis
 <InteractiveForceGraph
   simulationOptions={{ height: 300, width: 300 }}
   labelAttr="label"
-  onSelectNode={(node) => console.log(node)}
+  onSelectNode={(event, node) => console.log(node)}
   highlightDependencies
 >
   <ForceGraphNode node={{ id: 'first-node', label: 'First node' }} fill="red" />
